@@ -1,0 +1,909 @@
+Mon Sep 23 00:35:15 2002  GOTOU Yuuzou <gotoyuzo@notwork.org>
+
+	* version 1.2.3 released. 
+
+Sun Sep 22 19:27:33 2002  GOTOU Yuuzou <gotoyuzo@notwork.org>
+
+	* lib/webrick/httprequest.rb
+	  - read_header: should clear @raw_header and @header.
+	  - fixup: should prevent raising exceptions.
+
+	* lib/webrick/httpresponse.rb
+	  - request_method: new attribute.
+	  - send_response: prevent raising exceptions. 
+	  - send_body: do not send body if request_method is "HEAD".
+	  - send_body_io: use write_data() instead of IO#write.
+	  - send_body_string: ditto.
+
+	* lib/webrick/httpserver.rb (HTTPServer#run):
+	  - set HTTPResponse#request_method.
+	  - call HTTPRequest#fixup.
+
+Sat Sep 21 21:24:20 2002  GOTOU Yuuzou <gotoyuzo@notwork.org>
+
+	* lib/webrick/httpserver.rb (HTTPServer#service): remove initialized
+	 local variable.
+
+	* lib/webrick/version.rb: 2002-09-21
+
+Thu Sep 19 06:26:21 2002  GOTOU Yuuzou <gotoyuzo@notwork.org>
+
+	* lib/webrick/httprequest.rb (HTTPRequest#parse_uri): refactored
+	  and argument changed.
+
+	* lib/webrick/httprequest.rb (HTTPRequest#make_absolute_uri): removed.
+
+	* lib/webrick/https.rb: override HTTPRequest#parse_uri.
+
+Wed Sep 18 01:38:13 2002  Nakamura Hiroshi <nahi@keynauts.com>
+
+	* lib/webrick/httpresponse.rb (HTTPResponse#setup_header):
+	  typo fixed.
+
+Tue Sep 17 00:18:33 2002  GOTOU Yuuzou <gotoyuzo@notwork.org>
+
+	* lib/webrick/httprequest.rb:
+	  - HTTPRequest#initialize: initial value of @query is nil.
+	  - HTTPRequest#parse_uri(): should accept "*" as Request-URI.
+	    (it is a new method splited from parse().)
+	  - HTTPRequest#read_body(): typo fixed. (@bosy -> @body)
+	  - change the name of a constant. (BLOCK_SIZE -> BUFSIZE)
+
+	* lib/webrick/httpserver.rb (HTTPServer#do_OPTIONS): new method.
+	  it is called if the Request-URI is "*"
+
+	* lib/webrick/httpproxy.rb (HTTPProxyServer#do_OPTIONS): new method.
+	  it it overriding HTTPServer#do_OPTIONS.
+
+	* lib/webrick/httpservlet/abstract.rb (AbstractServer#do_OPTIONS):
+	  new method.
+
+	* lib/webrick/httpservlet/filehandler.rb (FileHandler#do_OPTIONS):
+	  new method.
+
+	* lib/webrick/version.rb: 2002-09-17
+
+Sun Sep 15 04:29:53 2002  GOTOU Yuuzou <gotoyuzo@notwork.org>
+
+	* lib/webrick/httprequest.rb (HTTPRequest#parse): should not read
+	  header of HTTP/0.9 requests.
+
+	* lib/webrick/httpresponse.rb (HTTPResponse#parse):
+	  - treat major number of the HTTP version. (RFC2145 -- 2.3)
+	  - should disable chunked if the request version is 0.9 or 1.0.
+
+	* lib/webrick/httpresponse.rb (HTTPResponse#send_body):
+	  chunked size must be a hexadecimal.
+
+	* lib/webrick/httpserver.rb (HTTPServer#run): should not send
+	  response if no Request-Line is given. 
+
+	* lib/webrick/httprequest.rb (HTTPRequest#parse): should return
+	  a Hash in every invocation.
+
+	* lib/webrick/log.rb (Log#log): output line-feed in atomic.
+
+Sat Sep 14 05:57:13 2002  GOTOU Yuuzou <gotoyuzo@notwork.org>
+
+	* lib/webrick/httpversion.rb: new file.
+	  Float is not appropreate as a representation of
+	  HTTP version. ([webrickja:53])
+
+	* lib/webrick/config.rb: ditto.
+
+	* lib/webrick/httpserver.rb: ditto.
+
+	* lib/webrick/httprequest.rb: ditto.
+
+	* lib/webrick/httpresponse.rb: ditto.
+
+Fri Sep 13 22:42:26 2002  GOTOU Yuuzou <gotoyuzo@notwork.org>
+
+	* lib/webrick/httprequest.rb (HTTPRequest#body): a block can
+	  be given to the method. each 2048 byte or chunked size of
+	  data is passed as block argument.
+
+	* lib/webrick/httprequest.rb: @acclog is removed.
+
+Fri Sep 13 05:43:56 2002  GOTOU Yuuzou <gotoyuzo@notwork.org>
+
+	* lib/webrick/httpresponse.rb (HTTPResponse#setup_header):
+	  content-length determination is fixed.
+	  (it is a new method splited from send_header.)
+
+Wed Sep 11 19:37:50 2002  GOTOU Yuuzou <gotoyuzo@notwork.org>
+
+	* lib/webrick/log.rb (BasicLog#initialize): typo fixed.
+
+Mon Sep  9 18:07:20 2002  GOTOU Yuuzou <gotoyuzo@notwork.org>
+
+	* lib/webrick/httpserver.rb (HTTPServer#unmount): typo fixed.
+
+Mon Sep  9 05:10:00 2002  GOTOU Yuuzou <gotoyuzo@notwork.org>
+
+	* version 1.2.2 released. 
+
+Fri Sep  6 16:23:33 2002  GOTOU Yuuzou <gotoyuzo@notwork.org>
+
+	* lib/webrick/httpproxy.rb (HTTPProxyServer#proxy_connect):
+	  - verbose messages shold be printed in debug mode.
+	  - access_log() should be called.
+
+	* lib/webrick/log.rb (BasicLog#log): should check @level.
+
+Thu Sep  5 23:51:32 2002  GOTOU Yuuzou <gotoyuzo@notwork.org>
+
+	* lib/webrick/httpserver.rb (HTTPServer#access_log):
+	  change the arguments specs.
+	  old: def access_log(addr, req, res, t, err=nil)
+	  new: def access_log(config, req, res)
+
+Thu Sep  5 15:11:57 2002  GOTOU Yuuzou <gotoyuzo@notwork.org>
+
+	* lib/webrick/httpresponse.rb (HTTPResponse#status_line):
+	  new method.
+
+	* lib/webrick/log.rb: new class WEBrick::BasicLog.
+	  It is shy logging interface (do not output timestamp).
+	  WEBrick::Log was changed to be a subclass of BasicLog.
+
+Tue Sep  3 18:54:36 2002  GOTOU Yuuzou <gotoyuzo@notwork.org>
+
+	* lib/webrick/httprequest.rb: new method attribute request_time.
+	  it indicates the time that Request-Line is received.
+
+	* lib/webrick/httpresponse.rb: new method filename and sent_size.
+	  filename is the pathname corresponding to the Request-URI.
+	  sent_size is the size of the body which has already been sent.
+
+	* lib/webrick/log.rb (Log#format): should not append trailing
+	  new line. it is added in Log#log.
+
+	* lib/webrick/httpservlet/filehandler.rb (FileHandler#exec_handler):
+	  set HTTPResponse#filename.
+
+Mon Sep  2 06:31:02 2002  GOTOU Yuuzou <gotoyuzo@notwork.org>
+
+	* lib/webrick/httpservlet/filehandler.rb (DefaultFileHandler#do_GET):
+	  - should not send entity headers with 304 (Not Modified). 
+	  - added ETag.
+
+Wed Aug 28 00:49:07 2002  GOTOU Yuuzou <gotoyuzo@notwork.org>
+
+	* lib/webrick/httprespose.rb:
+	  new private methods:
+	  - send_body_io(socket): if @body is an IO it copies the data
+	    from @body to socket.
+	  - _send_file(input, output, offset, size): send data between IOs.
+
+	* lib/webrick/httprespose.rb: support chunked encoding message.
+
+	* lib/webrick/httpserver.rb (HTTPServer#run): should call
+	  send_header() before logging.
+
+	* lib/webrick/httpservlet/filehandler.rb (DefaultFileHandler#do_GET):
+	  set File to @body.
+
+	* lib/webrick/httpservlet/version.rb: VERSION is 1.2.1.
+
+Mon Aug 12 02:46:45 2002  GOTOU Yuuzou <gotoyuzo@notwork.org>
+
+	* lib/webrick/httprequest.rb:
+	  - HTTPRequest#absolute_uri: removed.
+	  - HTTPRequest#request_uri: it returns absolute-URI.
+	  - HTTPRequest#request_uri_string: changed to unparsed_uri.
+
+	* lib/webrick/httpproxy.rb: ditto.
+
+	* lib/webrick/httpserver.rb: ditto.
+
+	* lib/webrick/httpresponse.rb: ditto.
+
+	* lib/webrick/httpresponse: instance variable @keep_conn was
+	  changed to @keep_alive. 
+
+Sun Aug 12 02:35:01 2002  Nakamura Hiroshi <nahi@keynauts.com>
+
+	* lib/webrick/httprequest.rb (read_chunked): typo fixed.
+
+Tue Jul  2 17:25:40 2002  Shirai Kaoru  <shirai@p1jp.com>
+
+	* lib/webric/cookie.rb (Cookie#expires=): should not set
+	  empty string by assigning nil.
+
+Tue May 28 12:10:53 2002  GOTOU Yuuzou  <gotoyuzo@notwork.org>
+
+	* lib/webrick/utils.rb: new method Utils::set_close_on_exec.
+
+	* lib/webrick/httprequest.rb (HTTPRequest#addr): new method. it
+	  returns TCPSocket#addr.
+
+	* lib/webrick/httprequest.rb (HTTPRequest#absolute_uri): host
+	  part should be a hostname which bound on the TCPSocket.
+
+	* lib/webrick/httpservlet/filehandler.rb: refine code.
+
+Wed May  1 12:05:50 2002  GOTOU Yuuzou  <gotoyuzo@notwork.org>
+
+	* lib/webrick/httpservlet/abstract.rb: new method
+	  AbstractServet#redirect_to_directory_uri().
+
+	* lib/webrick/httpservlet/filehandler.rb: ditto.
+
+	* lib/webrick/server.rb: refine source code layout.
+
+Mon Apr 29 00:52:52 2002  GOTOU Yuuzou  <gotoyuzo@notwork.org>
+
+	* lib/webrick/httpserver.rb (HTTPServer#access_log):
+	  added processing time of servlet.
+
+	* lib/webrick/httpserver.rb (HTTPServer#search_servlet):
+	  remove require_path_info?.
+
+	* lib/webrick/httpservlet/*.rb (AbstractServlet): ditto.
+
+Mon Apr 22 01:44:07 2002  GOTOU Yuuzou  <gotoyuzo@notwork.org>
+
+	* lib/webrick/httpdate.rb: HTTPDate was replaced by Time::parse
+	  and Time#httpdate.
+
+	* lib/webrick: ditto.
+
+	* lib/webrick/cookie.rb: ditto.
+
+	* lib/webrick/httpresponse.rb: ditto.
+
+	* lib/webrick/httpservlet/filehandler.rb: ditto.
+
+Wed Apr 17 16:10:02 2002  GOTOU Yuuzou  <gotoyuzo@notwork.org>
+
+	* lib/webrick/config: refine comments.
+
+Wed Apr 17 02:19:00 2002  GOTOU Yuuzou  <gotoyuzo@notwork.org>
+
+	* LAZY_THREAD branch is merged.
+
+Wed Apr 17 01:51:59 2002  GOTOU Yuuzou  <gotoyuzo@notwork.org>
+
+	* lib/webrick/httpserver.rb (HTTPServer#service):
+	  should preserve the query part of Requrest-URI in
+	  MovedPermanentry redirection.
+
+	* lib/webrick/httpservlet/filehandler.rb: ditto.
+
+	* lib/webrick/httprequest.rb (HTTPRequest#read_request_line):
+	  remove end-of-line of request-line for error log.
+
+	* lib/webrick/httprequest.rb (HTTPRequest#read_header):
+	  remove end-of-line of header line for error log.
+
+Wed Apr 17 01:14:10 2002  GOTOU Yuuzou  <gotoyuzo@notwork.org>
+
+	* lib/webrick/httpservlet/filehandler.rb (FileHandler#set_dir_list):
+	  should rescue File::stat. it may raise exceptions for
+	  broken symlinks.
+
+Thu Apr  4 06:23:28 2002  GOTOU Yuuzou  <gotoyuzo@notwork.org>
+
+	* lib/webrick/httpservlet/erbhandler.rb (ERbHandler#do_GET):
+	  added logging in exception handling.
+
+Wed Apr  3 22:37:12 2002  GOTOU Yuuzou  <gotoyuzo@notwork.org>
+
+	* lib/webrick/lib/uri.rb: removed.
+
+Thu Mar 28 15:46:43 2002  GOTOU Yuuzou  <gotoyuzo@notwork.org>
+
+	* lib/webrick/lib/httputils.rb (HTMLUtils::escape): should not
+	  duplicate argument if it's nil.
+
+Thu Mar 28 15:08:16 2002  Kazuhiro NISHIYAMA  <zn@mbf.nifty.com>
+
+	* lib/webrick/sample/httpd/htdocs/test.{cgi,rhtml}: Cross Site
+	  Scripting vulnerability was found.
+
+Tue Mar 26 00:53:29 2002  GOTOU Yuuzou  <gotoyuzo@notwork.org>
+
+	* lib/webrick/server.rb (GenericServer#start): should rescue
+	  ServerError. (it might be raised by accept_hook)
+
+	* lib/webrick/https.rb (HTTPServer#run): should set SSLSocket
+	  to thread parameter :WEBrickSocket.
+
+Fri Mar 22 08:18:10 2002  Lars Christensen  <larsch@cs.auc.dk>
+
+	* lib/webrick/httpresponse.rb (HTTPResponse#send_header):
+	  should set "Connection: Keep-Alive" in persistent connection.
+
+Wed Mar 20 23:47:16 2002  GOTOU Yuuzou  <gotoyuzo@notwork.org>
+
+	* lib/webrick/httpservlet/*.rb
+	  the first argument of initialize() is a HTTPServer.
+
+	* lib/webrick/server.rb (GenericServer#[]): new method to
+	  refer @config.
+
+	* lib/webrick/httpserver.rb (HTTPServer#service): pass the server
+	  itself to get_instance() instead of config.
+
+	* lib/webrick/httprequest.rb (HTTPRequest#attributes): new method
+	  which returns a Hash to set user data.
+
+Mon Mar 18 16:48:05 2002  GOTOU Yuuzou  <gotoyuzo@notwork.org>
+
+	* lib/webrick/log.rb (Log::initialize): use Symbols as argument of
+	  respond_to?.
+
+	* lib/webrick/utils.rb (Utils::getservername):
+	  Socket::getaddrinfo is expensive.
+
+Mon Mar 18 08:36:09 2002  GOTOU Yuuzou  <gotoyuzo@notwork.org>
+
+	* lib/webrick/server.rb (GenericServer#start): select() and
+	  accept() are enclosed by timeout.
+
+Mon Mar 18 03:07:27 2002  GOTOU Yuuzou  <gotoyuzo@notwork.org>
+
+	* lib/webrick/httpservlet/filehandler.rb (DefaultFileHandler):
+	  A new class to return the local files which was not
+	  corresponded with any handler.
+
+Sun Mar 17 23:22:24 2002  GOTOU Yuuzou  <gotoyuzo@notwork.org>
+
+	* lib/webrick/httprequest.rb (HTTPRequest#abstract_uri)
+	  should escape path for abstract_uri.
+
+	* lib/webrick/httpresponse.rb (HTTPResponse#send_header):
+	  get rid of checking the Status: header field.
+
+	* lib/webrick/httpservlet/cgihandler.rb (CGIHandler#do_GET):
+	  should set Status-Code using Status: from CGI script.
+
+	* lib/webrick/httpservlet/filehandler.rb (FileHandler#search_servlet):
+	  should check index file if the Request-URI was refering to directory.
+	  and get rid of redirection to the index file in set_local_file().
+
+	* lib/webrick/httpservlet/filehandler.rb (FileHandler#set_dir_list):
+	  should set the file size column if its size is equal or
+	  greater than zero.
+
+	* lib/webrick/version.rb: 2002-03-17
+
+Thu Mar 14 06:39:12 2002  GOTOU Yuuzou  <gotoyuzo@notwork.org>
+
+	* lib/webrick/httpservlet/erbhandler.rb (ERbHandler#do_GET):
+	  get rid of annoying message of error in loading erb/erbl.
+
+Wed Mar 13 05:23:27 2002  GOTOU Yuuzou  <gotoyuzo@notwork.org>
+
+	* lib/webrick/server.rb (GenericServer#start): should rescue
+	  ERPOTO by accept().
+
+	* lib/webrick/compat.rb: added Errno::EPROTO
+
+Wed Mar 13 04:44:45 2002  GOTOU Yuuzou  <gotoyuzo@notwork.org>
+
+	* lib/webrick/config.rb: :CGIIPathEnv added.
+
+	* lib/webrick/httpservlet/cgihandler.rb (CGIHandler#do_GET):
+	  set :CGIPathEnv to meta['PATH'].
+
+Mon Mar 11 04:34:30 2002  GOTOU Yuuzou  <gotoyuzo@notwork.org>
+
+	* lib/webrick/config.rb:
+	  - :ListenImmediately changed to :DoNotListen,
+	  - :CGIInterpreter added
+
+	* lib/webrick/httpservlet/cgihandler.rb (CGIHandler#do_GET):
+	  use :CGIInterpreter to execute CGI scripts.
+
+Mon Mar 11 03:30:12 2002  GOTOU Yuuzou  <gotoyuzo@notwork.org>
+
+	* lib/webrick/httpproxy.rb (HTTPProxyServer#proxy_service):
+	  if Request-URI is an absoluteURI, any Host header field MUST
+	  be ignored. (RFC2616 - 5.2 The Resource Identified by a Request)
+
+	* lib/webrick/httprequest.rb: (HTTPRequest#absolute_uri): new method.
+
+	* lib/webrick/httprequest.rb: (HTTPRequest#meta_vars):
+	  HTTPS metavariable now supported.
+
+	* lib/webrick/httprequest.rb: @http_version is a Float.
+
+	* lib/webrick/httpresponse.rb (HTTPResponse#send_header): 
+	  - Location: header value shold be an absoluteURI.
+	  - new instance variable @absolute_uri.
+
+	* lib/webrick/httpserver.rb (HTTPServer#run): :RequestHandler
+	  takes two arguments.
+
+	* lib/webrick/httpserver.rb (HTTPServer#run): redundant invocation
+	  of access_log() is removed.
+
+	* lib/webrick/httputils.rb: refine comment.
+
+	* lib/webrick/version.rb: VERSION is now 1.2.0
+
+Fri Mar  8 08:45:05 2002  Ueda Jiro  <jirohu@net-volunteer.org>
+
+	* lib/webrick/httprequest.rb (HTTPRequest#read_chunked):
+	  should check the chunk size.
+
+Tue Mar  5 01:33:03 2002  GOTOU Yuuzou  <gotoyuzo@notwork.org> 
+
+	* merged from WEBRICK_PROXY branch:
+	  - lib/webrick/httpproxy.rb: new file.
+
+	  - lib/webrick/config.rb: new configurations for HTTPProxyServer.
+
+	  - lib/webrick/httprequest.rb (HTTPRequest#parse): do not parse
+	    Request-URI if the CONNECT method was presented.
+
+	  - lib/webrick/httpserver.rb (HTTPServer#run): call access_log
+	    in ensure clause.
+
+	  - lib/webrick/httpserver.rb (HTTPServer#access_log): should not
+	    output if the Request-Line was not presented.
+
+	  - lib/webrick/server.rb (GenericServer#start): set the socket
+	    to thread variable.
+
+	* lib/webrick/cookie.rb: secialization for the Netscape Cookies.
+
+Tue Mar  5 01:15:06 2002  GOTOU Yuuzou  <gotoyuzo@notwork.org> 
+
+	* lib/webrick/server.rb (Daemon::start): should not terminate
+	  the process with ending the block.
+
+Thu Feb 21 20:11:39 2002  GOTOU Yuuzou  <gotoyuzo@notwork.org> 
+
+	* lib/webrick/httpserver.rb (HTTPServer#access_log):
+	  should not modify original request-line.
+
+	* lib/webrick/httpresponse.rb (HTTPResponse#each): new method.
+
+Mon Feb 18 00:45:41 2002  Rich Kilmer  <rich@infoether.com>
+
+	* lib/webrick/httpservlet/filehandler.rb (FileHandler#set_local_file):
+	  should set binmode for reading local files.
+
+Sun Feb 17 05:21:23 2002  GOTOU Yuuzou  <gotoyuzo@notwork.org> 
+
+	* lib/webrick/httpserver.rb (HTTPServer#service): it is dependenet
+	  on the server's HTTP version whether the keep-alive connection
+	  should be supported or not. and the status of request does not
+	  depend on the server's HTTP version.
+
+	* lib/webrick/httprequest.rb (HTTPRequest#parse): ditto.
+
+	* lib/webrick/config.rb: new parameter :AccessLog.
+
+	* lib/webrick/httpserver.rb (HTTPServer#access_log): output 
+	  access logs to :AccessLog.
+
+Fri Feb 15 08:32:40 2002  GOTO Kentaro  <gotoken@notwork.org>
+
+	* version 1.1.5 released. 
+
+Fri Feb 15 00:10:20 2002  GOTOU Yuuzou  <gotoyuzo@notwork.org>
+
+	* lib/webrick/httpserver.rb (HTTPServer#access_log):
+	  added "Referer:" and "User-Agent:".
+
+	* lib/webrick/server.rb (GenericServer#start): should use
+	  Array instead of ThreadGroup for keeping the worker threads.
+
+Thu Feb 14 00:25:18 2002  GOTOU Yuuzou <gotoyuzo@notwork.org>
+
+	* lib/webrick/httputils.rb: escaped encoding methods are renamed.
+	    escape        -> escape_form
+	    unepcape      -> unescape_form
+	    epcape_path   -> escape
+	    unepcape_path -> unescape
+
+	* lib/webrick/httprequest.rb (HTTPRequest#read_request_line):
+	  should unescape the path of URI before normalize.
+
+Sun Feb 10 23:08:00 2002  Kazuhiro NISHIYAMA  <zn@mbf.nifty.com>
+
+	* lib/webrick/httputils: fixed typo in `lowalpha' and `upalpha'.
+
+Wed Feb  6 05:25:45 2002  GOTOU Yuuzou  <gotoyuzo@notwork.org>
+
+	* version 1.1.4 released.
+
+Wed Feb  6 05:13:53 2002  GOTOU Yuuzou  <gotoyuzo@notwork.org>
+
+	* lib/webrick/compat.rb: new file.
+
+Sat Feb  2 02:11:01 2002  GOTOU Yuuzou  <gotoyuzo@notwork.org>
+
+	* lib/webrick/server.rb: should rescue exceptions from
+	  Socket#peeraddr.
+	
+Fri Feb  1 18:54:16 2002  GOTOU Yuuzou  <gotoyuzo@notwork.org>
+
+	* lib/webrick/httpresponse.rb: added private method _write_data()
+	  it handles EPIPE.
+
+	* lib/webrick/httprequest.rb: added private method _read_data().
+	  it returns nil if ECONNRESET is detected. 
+
+	* lib/webrick/server.rb: refine rescue clause.
+
+	* lib/webrick/httpserver.rb: ditto.
+
+	* lib/webrick/httpservlet/erbhandler.rb: ditto.
+
+Fri Jan 25 13:07:51 2002  NAKAMURA, Hirosi  <nakahiro@sarion.co.jp>
+
+	* lib/webrick/httpservlet/filehandler: fixed typo.
+
+Thu Jan 24 14:14:32 2002  GOTOU Yuuzou  <gotoyuzo@notwork.org>
+
+	* lib/webrick/httputils.rb (HTTPUrils::unescape): shold unescape
+	  space first.
+
+Thu Jan 24 01:58:10 2002  GOTOU Yuuzou  <gotoyuzo@notwork.org>
+
+	* lib/webrick/server.rb (GenericServer#start): added a debug
+	  message for inspecting inconsistent shutdown flow.
+
+Wed Jan 23 04:30:28 2002  GOTOU Yuuzou  <gotoyuzo@notwork.org>
+
+	* lib/webrick/httpservlet/cgi_runner.rb: use COMSPEC while
+	  RUBY_PLATFORM is mswin or mingw.
+
+Wed Jan 23 04:17:07 2002  GOTOU Yuuzou  <gotoyuzo@notwork.org>
+
+	* lib/webrick/httputils.rb (HTTPUtils::unescape_path): new method
+	  to unescape the path of URI. but it does not unescape the
+	  reserved characters defined by RFC2396.
+
+	* lib/webrick/httprequest.rb (HTTPRequest#read_request_line):
+	  should not unescape the path of request_uri.
+
+	* lib/webrick/httprequest.rb (HTTPRequest#parse): unescape path.
+
+Mon Jan 14 18:26:26 2002  GOTOU Yuuzou  <gotoyuzo@notwork.org>
+
+	* lib/webrick/uri.rb: try to load Akira Yamada's uri.rb.
+
+	* lib/webrick/httpserver.rb (HTTPServer#access_log): shold chop
+	  off CRLF explicitly.
+
+	* lib/webrick/version.rb: 2001-01-14
+
+Mon Jan 14 02:28:15 2002  GOTO Kentaro  <gotoken@notwork.org>
+
+	* lib/webrick/server.rb (GenericServer::start()): thread parameters
+	  i, i.e., arguments of Thread.start, is not shielded.  Added j. 
+
+Thu Jan 10 10:37:12 2002  GOTOU Yuuzou  <gotoyuzo@notwork.org>
+
+	* lib/webrick/log.rb: typo fixed.
+
+Wed Jan  9 09:09:43 2002  GOTOU Yuuzou  <gotoyuzo@notwork.org>
+
+	* lib/webrick/httpresponse.rb: the updating of @cookies
+	  had broken.
+
+	* lib/webrick/cookie.rb: @expires should be initialized.
+
+Sat Jan  5 23:02:05 2002  GOTOU Yuuzou  <gotoyuzo@notwork.org>
+
+	* lib/webrick/log.rb: some functionanlity was pushed back
+	  into Revision 1.9. set_device() and backtrace() are deprecated.
+	  (a subset of Log4r will be supported in later version.)
+
+	* lib/webrick/server.rb: Log#backtrace was replaced by Log#error.
+
+	* lib/webrick/httpserver.rb: ditto.
+
+Sat Jan  5 13:12:38 2002  GOTOU Yuuzou  <gotoyuzo@notwork.org>
+
+	* lib/webrick/log.rb (Log#set_device): new method.
+
+	* lib/webrick/httpserver.rb (HTTPServer#access_log): new method.
+
+	* lib/webrick/httpservlet/cgihandler: refine error messages.
+
+Thu Jan  3 05:12:28 2002  GOTOU Yuuzou  <gotoyuzo@notwork.org>
+
+	* lib/webrick/version.h: 1.1.3 (2002-01-03)
+
+	* version 1.1.3 released.
+
+Thu Jan  3 04:11:21 2002  GOTOU Yuuzou  <gotoyuzo@notwork.org>
+
+	* lib/webrick/HTTPRequest (HTTPRequest#parse): shold parse
+	  the query-string if the method is GET or HEAD.
+	  suggested by NaHi. thnaks.
+
+	* lib/webrick/cookie.rb
+	- Cookie#to_s: shold not escape Value, Path and Comment.
+	- Cookie#to_s: shold not attach Version while its version is 0. 
+	- Cookie#to_s: the delimitter of values is always "; "
+	- Cookie::parse shold not unescape.
+
+	* lib/webrick/config.rb: :ListenImmediately is added.
+
+	* lib/webrick/server.rb (GenericServer#initialize): do not listen
+	  if :ListenImmediately is not set.
+
+Wed Jan  2 11:27:52 2002  GOTOU Yuuzou  <gotoyuzo@notwork.org>
+
+	* lib/webrick/version.rb: 1.1.2 (2002-01-02)
+
+	* version 1.1.2 released.
+
+Wed Jan  2 11:01:32 2002  GOTOU Yuuzou  <gotoyuzo@notwork.org>
+
+	* lib/webrick/httprequest.rb: IO#gets() and IO#read() are replaced
+	  by new methods: read_line() and read_data(). these methods are
+	  the wrapper to raise RequestTimeout error.
+
+	* lib/webrick/httpserver.rb: shold rescue RequestTimeout.
+
+	* lib/webrick/server.rb (GenericServer#initialize): do not listen
+	  if :Port is not set.
+
+	* lib/webrick/server.rb (GenericServer#start): refine log messages.
+
+	* lib/webrick/https.rb: override run() instead of start().
+
+	* lib/webrick/log.rb (Log#log): refactored.
+
+Tue Jan  1 02:20:30 2002  GOTOU Yuuzou  <gotoyuzo@notwork.org>
+
+	* lib/webrick/httpservlet/cgihandler.rb (CGIHandler#do_GET):
+	  added some error checks.
+
+	* lib/webrick/httpservlet/cgi_runner.rb: use COMSPEC to execute
+	  CGI scripts. (for mswin32)
+
+Mon Dec 31 22:09:56 2001  GOTOU Yuuzou  <gotoyuzo@notwork.org>
+
+	* lib/webrick/server.rb (Daemon.start): the exit status of
+	  parent process should be 0; suggested by NaHi. thnaks.
+
+Sun Dec 30 06:55:53 2001  GOTOU Yuuzou  <gotoyuzo@notwork.org>
+
+	* lib/webrick/config.rb: :TempDir was added.
+
+	* lib/webrick/httpservlet/cgihandler.rb (CGIHandler#do_GET):
+	  output from CGI scripts are passed through temporary files.
+
+	* lib/webrick/httpservlet/cgi_runner.rb: ditto.
+
+	* lib/webrick/httpauth.rb: (HTTPAuth::_basic_auth): the given
+	  block is called even if the Authorization: header field
+	  doesn't exist.
+
+	* lib/webrick/version.rb: 2001-12-30
+
+Mon Dec 24 08:58:51 2001  GOTOU Yuuzou  <gotoyuzo@notwork.org>
+
+	* lib/webrick/https.rb: Ruby/OpenSSL version string was corrected.
+
+Sat Dec 22 04:54:41 2001  GOTOU Yuuzou  <gotoyuzo@notwork.org>
+
+	* lib/webrick/httpserver.rb (MountTab#compile): refine regex.
+
+Fri Dec 21 03:28:50 2001  GOTOU Yuuzou  <gotoyuzo@notwork.org>
+
+	* lib/webrick/uri.rb (URI#to_s): should reconstruct from instance
+	  variables; suggested by Satoru Takabayashi. Thank you.
+
+Thu Dec 20 02:07:04 2001  GOTOU Yuuzou  <gotoyuzo@notwork.org>
+
+	* lib/webrick/httpserver.rb (HTTPServer#initialize): shold mount
+	  FileHandler only if :DocumentRoot is specified.
+
+	* lib/webrick/httpserver.rb (HTTPServer#search_servlet): returns
+	  nil if no servlet was found.
+
+	* lib/webrick/httpserver.rb (MountTab): refactored.
+	  the rule of evaluation of the pathname was changed; the root
+	  directory has empty name. so when a pathname "/xxx" is given
+	  to the mount point "/", PATH_INFO becomes "/xxx" and
+	  SCRIPT_NAME becomes empty. (note: CGI/1.1 specification allows
+	  empty SCRIPT_NAME.)
+	  other behaviors were not changed. or so i think :-)
+
+	* test/TestWEBrickHTTPServer.rb: follow above changes.
+
+Wed Dec 19 15:35:45 2001  GOTO Kentaro  <gotoken@notwork.org>
+
+	* lib/webrick/httpserver.rb (HTTPServer::MountTab): created. 
+
+	* lib/webrick/httpserver.rb (HTTPServer#search_servlet): rewrote
+	  as regexp-based search. 
+
+	* lib/webrick/httpserver.rb (HTTPServer#new): changed @mount_tab 
+	  to an instance of MountTab < Hash. 
+
+	* lib/webrick/httpserver.rb (HTTPServer#mount): moved path check
+	  to MountTab#normalize. 
+
+	* lib/webrick/httpserver.rb (HTTPServer#unmount): moved path check
+	  to MountTab#normalize. 
+
+	* test/TestWEBrickHTTPServer.rb: added some assertions for
+	  HTTPServer#search_servlet().
+
+Tue Dec 18 09:00:24 2001  GOTOU Yuuzou  <gotoyuzo@notwork.org>
+
+	* lib/webrick/cookie.rb (Cookie#initialize): some instance
+	  variables were not initialized.
+
+Mon Dec 17 09:38:12 2001  GOTOU Yuuzou  <gotoyuzo@notwork.org>
+
+	* sample/rfc/rfc.rb (ShutdownServlet#do_GET): `break' has no
+	  argument on ruby16.
+
+	* version 1.1.1 released.
+
+Sun Dec 16 22:48:02 2001  GOTO Kentaro  <gotoken@notwork.org
+
+	* doc/webrick.rd
+	- killed redundant "module Config"
+	- fixed hello.rb bug
+	- HTTPSServer is not subclass
+
+Sun Dec 16 12:42:17 2001  GOTOU Yuuzou  <gotoyuzo@notwork.org>
+
+	* version 1.1.0 released.
+
+Sun Dec 16 00:40:22 2001  GOTOU Yuuzou  <gotoyuzo@notwork.org>
+
+	* lib/webrick/https.rb: moved from contrib directory.
+
+Sat Dec 15 23:56:39 2001  GOTOU Yuuzou  <gotoyuzo@notwork.org>
+
+	* lib/webrick/server.rb (GenericServer#listen): should rescue errors
+	  from TCPSocket.new. (unsupported address family may be returned by
+	  Socket::getaddrinfo on some platforms.)
+
+	* lib/webrick/httpserver.rb (HTTPServer#run): should rescue
+	  NameError explicitly since it under ScriptError in ruby-1.6.
+
+	* lib/webrick/httpserver.rb (HTTPServer#mount_proc): new method for
+	  mounting Proc objects or blocks like Servlets.
+	  Rich Kilmer <rich@infoether.co> proposed this idea and
+	  contributed code. thanks.
+
+	* lib/httpservlet/prochandler.rb: new file.
+
+Sat Dec 14 18:21:48 2001  GOTOU Yuuzou  <gotoyuzo@notwork.org>
+
+	* lib/webrick/httpservlet/abstract.rb (AbstractServlet#initialize):
+	  new instance variable @logger.
+
+	* lib/webrick/httpservlet/erbhandler.rb: new-line is added to
+	  error message.
+
+	* lib/webrick/httpauth.rb: _basic_auth became private class method.
+
+	* lib/webrick/log.rb: refactored.
+
+	* ChangeLog: format fixed.
+
+Fri Dec  7 01:43:26 2001  GOTOU Yuuzou  <gotoyuzo@notwork.org>
+
+	* version 1.0.0 released.
+
+Thu Dec  6 04:42:18 2001  GOTOU Yuuzou  <gotoyuzo@notwork.org>
+
+	* lib/webrick/httpservlet/filehandler.rb (FileHandler#set_dir_list):
+	  the order of list in sorting by `Size' column was corrected.
+
+Thu Dec  6 02:52:24 2001  GOTOU Yuuzou  <gotoyuzo@notwork.org>
+
+	* lib/webrick/server.rb (GenericServer#start): the timeout of
+	  IO::select was changed. (from 0.1sec to 2.0sec)
+
+Tue Dec  4 01:57:00 2001  GOTOU Yuuzou  <gotoyuzo@notwork.org>
+
+	* lib/webrick/httprequest.rb (HTTPRequest#[],each): join values.
+
+	* lib/webrick/httpserver.rb (HTTPServer#mount,umount): remove trailing
+	  slashes in mount point.
+
+	* sample/rfc/rfc.rb: reworked.
+
+Sat Dec  1 00:04:45 2001  GOTOU Yuuzou  <gotoyuzo@notwork.org>
+
+	* lib/webrick/httprequest.rb (HTTPRequest#to_s): should use Array#join
+	  in joining @raw_header.
+
+	* lib/webrick/httpresponse.rb (HTTPResponse#send_header): sholdn't
+	  overwite Server: header field.
+
+	* lib/webrick/log.rb (Log::backtrace): shold join whole lines
+	  before print.
+
+	* lib/webrick/server.rb (GenericServer#start) shold use SizedQueue
+	  instead of Queue.
+
+	* lib/webrick/httpservlet/abstract.rb (AbstractServlet#initialize):
+	  change type of the first argument from HTTPServer to config.
+
+	* lib/webrick/httpservlet/cgihandler.rb: ditto.
+
+	* lib/webrick/httpservlet/erbhandler.rb: ditto.
+
+	* lib/webrick/httpservlet/httpserver.rb: ditto.
+
+	* lib/webrick/httpservlet/httpserver.rb (HTTPServer#search_servlet):
+	  reworked.
+
+Thu Nov 29 06:31:56 2001  GOTO Kentaro  <gotoken@notwork.org>
+
+	* lib/webrick/httpstatus: added HTTPStatus[n] which returns the 
+	  exception class for the code n.  This uses a hash CodeToError. 
+
+Thu Nov 29 04:24:07 2001  GOTOU Yuuzou  <gotoyuzo@notwork.org>
+
+	* lib/webrick/version.rb: new file.
+
+Wed Nov 28 02:58:16 2001  GOTOU Yuuzou  <gotoyuzo@notwork.org>
+
+	* lib/webrick/server.rb: GenericServer#listen reworked.
+	  all the addresses which returned by getaddrinfo should be bound.
+
+Tue Nov 27 04:26:28 2001  GOTOU Yuuzou  <gotoyuzo@notwork.org>
+
+	* lib/webrick/server.rb (GenericServer#shutdown): shold clear @listner.
+
+Tue Nov 27 03:25:00 2001  GOTOU Yuuzou  <gotoyuzo@notwork.org>
+
+	* lib/webrick/config.rb: :LogFile and :LogLevel was gone.
+	  NOTICE: please specify an instance of WEBrick::Log as :Logger.
+
+	* lib/webrick/server.rb: GenricServer.start was gone.
+
+Sun Nov 25 03:52:46 2001  GOTOU Yuuzou  <gotoyuzo@notwork.org>
+
+	* lib/webrick/httputils.rb (normalize_path): reworked.
+
+	* lib/webrick/httprequest.rb (HTTPRequest#parse): should rescue some
+	  operations related to URI.
+
+	* lib/webrick/httprequest.rb (HTTPRequest#parse): should chomp the
+	  Request-Line in error messges.
+
+	* test/TestWEBrickHTTPUtils.rb: new file.
+
+Fri Nov 23 00:35:24 2001  Satoshi Takei  <takes@on.rim.or.jp>
+
+	* lib/webrick/server.rb: should use $$ instead of Process.pid.
+	  (see also ruby-bugs-ja:PR#153)
+
+Sat Nov 17 12:56:33 2001  GOTOU Yuuzou  <gotoyuzo@notwork.org>
+
+	* OpenSSL::Pkey::RSA.new requires a block for callback.
+
+Mon Nov 12 14:23:01 2001  GOTOU Yuuzou  <gotoyuzo@notwork.org>
+
+	* lib/webrick/httprequest.rb: new method to_s.
+
+Sun Nov 11 14:45:05 2001  GOTOU Yuuzou  <gotoyuzo@notwork.org>
+
+	* lib/webrick/httpserver.rb (HTTPServer#run): use
+	  HTTPResponse#send_header() and send_body() instead of send_response().
+
+	* lib/webrick/httpservlet/abstract.rb (AbstractServlet#do_HEAD):
+	  should not clear the message body.
+
+	* lib/webrick/utils.rb: new file.
+
+	* lib/webrick/server.rb: su() went under Utils.
+
+	* lib/webrick/httputils.rb: HTTPUtils::getservername went under Utils.
+
+	* lib/webrick/config.rb: new constant RELEASE_DATE.
+
+Fri Nov  9 14:43:17 2001  GOTOU Yuuzou  <gotoyuzo@notwork.org>
+
+	* lib/contrib/https.rb: SSLSocket was replaced by OpenSSL.

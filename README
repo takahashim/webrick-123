@@ -1,0 +1,45 @@
+
+                             WEBrick
+                             =======
+
+
+WEBrick is a Simple HTTP Server Toolkit for Ruby.
+
+
+License and Warranty
+--------------------
+
+This module's license is the same of Ruby. You can redistribute
+it and/or modify it under the same term as Ruby (see the file LICENCE).
+
+And, We offer NO WARRANTY for using this module in any conditions.
+
+Requirements
+------------
+
+  * Ruby 1.6.5 or later
+    (http://www.ruby-lang.org/en/download.html)
+
+  * ERb - Tiny eRuby 1.3.3 (optional)
+    (http://www.ruby-lang.org/en/raa-list.rhtml?name=ERb+-+Tiny+eRuby)
+
+  * Ruby/OpenSSL 0.0.9 (optional)
+    (http://www.ruby-lang.org/en/raa-list.rhtml?name=OpenSSL)
+  
+
+How to Install
+--------------
+
+Run install.rb. Type as follows:
+
+  $ ruby install.rb
+
+
+Samples
+-------
+
+In directory `sample', there are sample applications.
+
+
+------
+IPR -- Internet Programming with Ruby -- writers (ipr@notwork.org)

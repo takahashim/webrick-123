@@ -1,0 +1,72 @@
+<html>
+<head>
+<title>
+sample eRuby document.
+</title>
+</head>
+<body>
+<h2>meta variables</h2>
+<pre>
+<%=
+  HTMLUtils::escape(env.collect{|key, value|
+    "#{key}=#{value}"
+  }.join("\n"))
+%>
+</pre>
+
+<h2>sample form</h2>
+<form method="<%=env["REQUEST_METHOD"] == "GET" ? "POST" : "GET"%>">
+
+<input type="text" name="form1"
+ value="<%= HTMLUtils::escape(request.query['form1']) %>">
+<br>
+
+<input type="text" name="form2">
+<br>
+
+<textarea name="text">
+</textarea>
+<br>
+
+<select name="select1">
+<option>option a
+<option>option b
+<option>option c
+<option>option d
+</select>
+
+<p>
+checkbox:
+<input type="checkbox" name="check" value="a">a
+<input type="checkbox" name="check" value="b">b
+<input type="checkbox" name="check" value="c">c
+<input type="checkbox" name="check" value="d">d
+
+<p>
+<input type=submit value="SUBMIT">
+
+</form>
+<HR>
+
+<h2>previous input</h2>
+hash format:
+<%= HTMLUtils::escape(request.query.inspect) %>
+<p>
+table format:
+<table border=1>
+  <tr>
+    <th>key</th><th>value</th>
+  </tr>
+<% request.query.each{|key, value| %>
+  <tr>
+    <td><%= HTTPUtils::escape(key) %></td>
+    <td><%= HTTPUtils::unescape(value) %></td>
+  </tr>
+<% } %>
+</table>
+
+<h3>internal data</h3>
+<%= HTMLUtils::escape(request.inspect) %>
+
+</body>
+</html>
